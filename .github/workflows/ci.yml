@@ -1,0 +1,38 @@
+name: PropertyFinder CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+
+      - name: Build
+        run: |
+          xcodebuild build \
+            -scheme PropertyFinder \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+            -quiet
+
+      - name: Run Tests
+        run: |
+          xcodebuild test \
+            -scheme PropertyFinder \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+            -resultBundlePath TestResults.xcresult \
+            -quiet
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults.xcresult

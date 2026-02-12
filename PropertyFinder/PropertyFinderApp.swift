@@ -1,17 +1,13 @@
-//
-//  PropertyFinderApp.swift
-//  PropertyFinder
-//
-//  Created by tomtomtom on 2/12/26.
-//
-
 import SwiftUI
 
 @main
 struct PropertyFinderApp: App {
+    @State private var coordinator = AppCoordinator()
+    @State private var container = DependencyContainer.shared
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(coordinator: coordinator, container: container)
         }
     }
 }
